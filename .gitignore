@@ -1,1 +1,6 @@
 ECHO is on.
+db.sqlite3
+__pycache__/
+venv/
+*.py[cod]
+backend/curl
