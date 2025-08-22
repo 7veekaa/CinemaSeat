@@ -1,49 +1,43 @@
-from decimal import Decimal
+from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import Movie, Screen, Show, Seat, Booking
+from .models import Movie, Show, Seat, Booking
 
+# Existing (you already had these):
 class MovieSerializer(serializers.ModelSerializer):
     class Meta:
         model = Movie
-        fields = ["id", "title", "description", "duration_min", "rating"]
-
-class ScreenSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Screen
-        fields = ["id", "name", "rows", "cols"]
+        fields = "__all__"
 
 class ShowSerializer(serializers.ModelSerializer):
-    movie = MovieSerializer(read_only=True)
-    screen = serializers.StringRelatedField()
-
     class Meta:
         model = Show
-        fields = ["id", "movie", "screen", "start_time", "price"]
+        fields = "__all__"
 
-class SeatSerializer(serializers.ModelSerializer):
-    screen = serializers.PrimaryKeyRelatedField(read_only=True)
-
+class BookingSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Seat
-        fields = ["id", "row", "col", "screen"]
+        model = Booking
+        fields = "__all__"
 
 class BookingCreateSerializer(serializers.Serializer):
     show_id = serializers.IntegerField()
-    seat_ids = serializers.ListField(
-        child=serializers.IntegerField(min_value=1),
-        allow_empty=False
-    )
+    seat_ids = serializers.ListField(child=serializers.IntegerField(), allow_empty=False)
 
-    def validate_seat_ids(self, value):
-        if len(value) != len(set(value)):
-            raise serializers.ValidationError("Duplicate seat IDs are not allowed.")
-        return value
+# New: user-facing serializers
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["id", "username", "email", "first_name", "last_name"]
 
-class BookingSerializer(serializers.ModelSerializer):
-    show = ShowSerializer(read_only=True)
-    seats = SeatSerializer(many=True, read_only=True)
-    total_amount = serializers.DecimalField(max_digits=10, decimal_places=2)
+class RegisterSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, min_length=6)
 
     class Meta:
-        model = Booking
-        fields = ["id", "show", "seats", "total_amount", "status", "created_at"]
+        model = User
+        fields = ["username", "email", "password"]
+
+    def create(self, validated_data):
+        return User.objects.create_user(
+            username=validated_data["username"],
+            email=validated_data.get("email", ""),
+            password=validated_data["password"],
+        )
