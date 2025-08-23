@@ -4,3 +4,4 @@ __pycache__/
 venv/
 *.py[cod]
 backend/curl
+backend/demo_bookings.json
