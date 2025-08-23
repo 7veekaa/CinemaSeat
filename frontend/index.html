@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>CinemaSeat — BMS-style (Lite)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  .scrollbar-none::-webkit-scrollbar{display:none}
+  .scrollbar-none{scrollbar-width:none}
+</style>
+</head>
+<body class="bg-zinc-100 text-zinc-900">
+
+<header class="bg-[#1f2533] text-white">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
+    <div class="flex items-center gap-2 font-bold">
+      <span class="inline-block w-2.5 h-2.5 rounded-full bg-[#f84464]"></span>
+      <span class="text-lg">CinemaSeat</span>
+    </div>
+
+    <div class="flex-1 mx-3 hidden md:flex items-center bg-[#2b3142] rounded-lg px-3">
+      <input id="q" class="w-full bg-transparent outline-none text-indigo-100 placeholder-indigo-200/70 py-2"
+        placeholder="Search for Movies, Events, Plays, Sports"/>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <span id="userBadge" class="text-sm text-indigo-100/80 hidden"></span>
+      <button id="loginBtn" onclick="openLogin()" class="border border-white text-white rounded-lg px-3 py-2 hover:bg-white/10">
+        Sign In
+      </button>
+      <button id="logoutBtn" onclick="logout()" class="border border-white text-white rounded-lg px-3 py-2 hover:bg-white/10 hidden">
+        Logout
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-4 mt-6">
+  <section>
+    <h2 class="text-xl font-semibold mb-3">Recommended Movies</h2>
+    <div id="recMovies" class="flex gap-4 overflow-x-auto scrollbar-none pb-2"></div>
+  </section>
+
+  <section class="mt-6">
+    <h2 class="text-xl font-semibold mb-3">Premiers</h2>
+    <div id="premiers" class="flex gap-4 overflow-x-auto scrollbar-none pb-2"></div>
+  </section>
+
+  <!-- Booking Panel -->
+  <section class="mt-8 bg-white rounded-xl p-4 grid md:grid-cols-3 gap-4 shadow-sm">
+    <div>
+      <h3 class="font-semibold mb-2">Cinemas</h3>
+      <div id="cinList" class="flex flex-col gap-2">
+        <button id="cinDemoBtn" class="border rounded-lg p-2 text-left hover:bg-zinc-50">
+          CinemaSeat Multiplex (Demo)
+        </button>
+      </div>
+
+      <h3 class="font-semibold mb-2 mt-6">Movies</h3>
+      <div id="mvList" class="flex flex-col gap-2 max-h-72 overflow-auto">
+        <div class="text-zinc-500">Click cinema above, then Load Movies.</div>
+      </div>
+      <button onclick="loadMovies()" class="mt-3 bg-[#f84464] text-white px-3 py-2 rounded-lg font-semibold">
+        Load Movies
+      </button>
+    </div>
+
+    <div>
+      <h3 class="font-semibold mb-2">Shows</h3>
+      <div id="shList" class="flex flex-col gap-2 max-h-72 overflow-auto">
+        <div class="text-zinc-500">Pick a movie.</div>
+      </div>
+    </div>
+
+    <div>
+      <div class="flex items-center justify-between">
+        <h3 class="font-semibold mb-2">Seats</h3>
+        <div class="text-xs text-zinc-500">Maximum 6 seats</div>
+      </div>
+      <div id="legend" class="text-xs text-zinc-600 mb-2">
+        <span class="inline-block w-4 h-4 align-middle border rounded mr-1"></span> Available
+        <span class="inline-block w-4 h-4 align-middle bg-zinc-300 border rounded mx-2"></span> Booked
+        <span class="inline-block w-4 h-4 align-middle bg-[#f84464] border rounded mx-2"></span> Selected
+      </div>
+      <div id="seats" class="grid grid-cols-10 gap-2"></div>
+      <div class="mt-3 flex items-center justify-between">
+        <div id="selCount" class="text-sm text-zinc-600">Selected: 0</div>
+        <button id="payBtn" class="bg-[#f84464] text-white px-4 py-2 rounded-lg font-semibold disabled:opacity-50" disabled>
+          Pay
+        </button>
+      </div>
+      <div id="bookMsg" class="text-sm text-zinc-500 mt-2"></div>
+    </div>
+  </section>
+
+  <!-- Booking History -->
+  <section class="mt-8 bg-white rounded-xl p-4 shadow-sm">
+    <div class="flex items-center justify-between">
+      <h3 class="font-semibold">My Booking History</h3>
+      <button onclick="loadHistory()" class="border px-3 py-1.5 rounded-lg hover:bg-zinc-50">Refresh</button>
+    </div>
+    <div id="history" class="mt-3 text-sm text-zinc-700">
+      <div class="text-zinc-500">Login, then click Refresh to see your bookings.</div>
+    </div>
+  </section>
+</main>
+
+<footer class="bg-zinc-200 mt-10">
+  <div class="max-w-6xl mx-auto px-4 py-6 text-sm text-zinc-700">
+    © 2025 CinemaSeat — Inspired by BookMyShow
+  </div>
+</footer>
+
+<script src="./app.js"></script>
+</body>
+</html>
